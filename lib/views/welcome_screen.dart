@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizora/utils/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:quizora/views/admin/admin_dashboard.dart';
 import 'package:quizora/views/quiz_category.dart';
 import 'package:get/get.dart';
 
@@ -51,7 +52,12 @@ class WelcomeScreen extends StatelessWidget {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      Get.to(QuizCategoryScreen());
+                      final userName = userNameController.text;
+                      if (userName == "Admin" || userName == "admin") {
+                        Get.to(AdminDashboard());
+                      } else {
+                        Get.to(QuizCategoryScreen());
+                      }
                     },
                     child: Container(
                       width: double.infinity,
