@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quizora/controllers/controller_question.dart';
 // import 'package:flutter/rendering.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -10,28 +11,31 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  final QuestionController questionController = Get.put(QuestionController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Admin Dashboard"), centerTitle: true),
-      body: ListView.builder(
-        itemCount: 50,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              leading: Icon(Icons.question_answer),
-              title: Text("Title"),
-              subtitle: Text("Subtitle"),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  // Handle delete action
-                },
+      body: Obx(() {
+        return ListView.builder(
+          itemCount: questionController.savedCategories.length,
+          itemBuilder: (context, index) {
+            return Card(
+              child: ListTile(
+                leading: Icon(Icons.question_answer),
+                title: Text(questionController.savedCategories[index]),
+                subtitle: Text(questionController.savedSubtitles[index]),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    // Handle delete action
+                  },
+                ),
               ),
-            ),
-          );
-        },
-      ),
+            );
+          },
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: _showDialogBox,
         child: const Icon(Icons.add),
@@ -47,9 +51,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
       content: Column(
         children: [
           TextFormField(
+            controller: questionController.categoryTitleController,
             decoration: InputDecoration(hintText: "Enter category name"),
           ),
           TextFormField(
+            controller: questionController.categorySubtitleController,
             decoration: InputDecoration(hintText: "Enter category subtitle"),
           ),
         ],
@@ -57,7 +63,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
       textConfirm: "Create",
       textCancel: "Cancel",
       onConfirm: () {
-        print("Question set has been created.");
+        questionController.savedQuestionsCategoryToSharedPreferences();
+        Get.back();
       },
     );
   }
