@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:quizora/controllers/controller_question.dart';
+import 'package:get/get.dart';
+import 'package:quizora/views/quiz_screen.dart';
 
 class QuizCategoryScreen extends StatelessWidget {
-  const QuizCategoryScreen({super.key});
+  QuizCategoryScreen({super.key});
+
+  final QuestionController _questionController = Get.put(QuestionController());
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +24,23 @@ class QuizCategoryScreen extends StatelessWidget {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
             ),
-            itemCount: 50,
+            itemCount: _questionController.savedCategories.length,
             itemBuilder: (context, index) {
               return Card(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(
+                      QuizScreen(
+                        category: _questionController.savedCategories[index],
+                      ),
+                    );
+                  },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.question_answer),
-                      Text("Quiz Title"),
-                      Text("Quiz Subtitle"),
+                      Text(_questionController.savedCategories[index]),
+                      Text(_questionController.savedSubtitles[index]),
                     ],
                   ),
                 ),

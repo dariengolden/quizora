@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quizora/controllers/controller_question.dart';
+import 'package:quizora/views/admin/admin_screen.dart';
 // import 'package:flutter/rendering.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -13,6 +14,13 @@ class AdminDashboard extends StatefulWidget {
 class _AdminDashboardState extends State<AdminDashboard> {
   final QuestionController questionController = Get.put(QuestionController());
   @override
+  void initState() {
+    super.initState();
+    questionController.loadQuestionCategoryFromSharedPreferences();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Admin Dashboard"), centerTitle: true),
@@ -22,6 +30,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
           itemBuilder: (context, index) {
             return Card(
               child: ListTile(
+                onTap: () {
+                  Get.to(
+                    AdminScreen(
+                      quizCategory: questionController.savedCategories[index],
+                    ),
+                  );
+                },
                 leading: Icon(Icons.question_answer),
                 title: Text(questionController.savedCategories[index]),
                 subtitle: Text(questionController.savedSubtitles[index]),
