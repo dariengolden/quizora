@@ -36,30 +36,27 @@ class AdminScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Handle save action
-                  if (questionController
-                      .questionTextController
-                      .text
-                      .isNotEmpty) {
+                  if (questionController.questionTextController.text.isEmpty) {
                     Get.snackbar("Required", "Please fill in all fields");
                   } else if (questionController
                       .optionTextController[0]
                       .text
-                      .isNotEmpty) {
+                      .isEmpty) {
                     Get.snackbar("Required", "Please fill in all fields");
                   } else if (questionController
                       .optionTextController[1]
                       .text
-                      .isNotEmpty) {
+                      .isEmpty) {
                     Get.snackbar("Required", "Please fill in all fields");
                   } else if (questionController
                       .optionTextController[2]
                       .text
-                      .isNotEmpty) {
+                      .isEmpty) {
                     Get.snackbar("Required", "Please fill in all fields");
                   } else if (questionController
                       .optionTextController[3]
                       .text
-                      .isNotEmpty) {
+                      .isEmpty) {
                     Get.snackbar("Required", "Please fill in all fields");
                   } else {
                     addQuestion();
@@ -96,5 +93,10 @@ class AdminScreen extends StatelessWidget {
 
     // Save question to SharedPreferences
     await questionController.saveQuestionToSharedPreferences(newQuestion);
+    Get.snackbar("Success", "Question added successfully");
+    questionController.questionTextController.clear();
+    questionController.optionTextController.forEach((element) {
+      element.clear();
+    });
   }
 }

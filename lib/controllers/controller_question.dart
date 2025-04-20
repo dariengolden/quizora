@@ -5,11 +5,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:quizora/views/score_page.dart';
 
-class QuestionController extends GetxController {
+class QuestionController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  // User Interface Code
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  Animation<double> get animation => _animation;
+
   late PageController _pageController;
   PageController get pageController => _pageController;
 
-  // User Interface Code
   bool _isAnswered = false;
   bool get isAnswered => _isAnswered;
 
@@ -106,11 +111,13 @@ class QuestionController extends GetxController {
     _selectedAns = selectedText;
 
     if (_correctAns == _selectedAns) _numOfCorrectAns++;
-    _isAnswered = true;
-    nextQuestion();
+    _animationController.stop();
+    Future.delayed(const Duration(seconds: 3), () {
+      nextQuestion();
+    });
   }
 
-  void nextQuestion() {
+  void nextQuestion() async {
     if (_questionNumber.value != _questions.length) {
       _isAnswered = false;
 
@@ -123,11 +130,27 @@ class QuestionController extends GetxController {
     }
   }
 
+  void updateQuestionNumber(int index) {
+    _questionNumber.value = index + 1;
+    update();
+  }
+
   @override
   void onInit() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 60),
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
+      ..addListener(() {
+        update();
+      });
+    _animationController.forward().whenComplete(nextQuestion);
     loadQuestionCategoryFromSharedPreferences();
     loadQuestionsFromSharedPreferences();
     _pageController = PageController();
+    update();
+
     super.onInit();
   }
 }

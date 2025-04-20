@@ -15,12 +15,7 @@ class WelcomeScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          SvgPicture.asset(
-            "assets/bg.svg",
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
+          SvgPicture.asset("assets/bg.svg", fit: BoxFit.fitWidth),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -29,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   const Spacer(flex: 2),
                   Text(
-                    "Let's Play Quiz",
+                    "Welcome to Quizora",
                     style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
